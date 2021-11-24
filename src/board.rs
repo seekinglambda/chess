@@ -628,7 +628,7 @@ impl Board {
             Some(x) => {
                 if self.pieces(Piece::Pawn)
                     & self.color_combined(!self.side_to_move)
-                    & BitBoard::from_square(x)
+                    & BitBoard::from_square(x.forward(self.side_to_move))
                     == EMPTY
                 {
                     return false;
@@ -812,7 +812,7 @@ impl Board {
     fn set_ep(&mut self, sq: Square) {
         // Only set self.en_passant if the pawn can actually be captured next move.
         if get_adjacent_files(sq.get_file())
-            & get_rank(sq.get_rank())
+            & get_rank(sq.forward(self.side_to_move).get_rank())
             & self.pieces(Piece::Pawn)
             & self.color_combined(!self.side_to_move)
             != EMPTY
@@ -956,14 +956,10 @@ impl Board {
             } else if (source_bb & get_pawn_source_double_moves()) != EMPTY
                 && (dest_bb & get_pawn_dest_double_moves()) != EMPTY
             {
-                result.set_ep(dest);
+                result.set_ep(dest.backward(self.side_to_move));
                 result.checkers ^= get_pawn_attacks(ksq, !result.side_to_move, dest_bb);
-            } else if Some(dest.ubackward(self.side_to_move)) == self.en_passant {
-                result.xor(
-                    Piece::Pawn,
-                    BitBoard::from_square(dest.ubackward(self.side_to_move)),
-                    !self.side_to_move,
-                );
+            } else if Some(dest) == self.en_passant {
+                result.xor(Piece::Pawn, BitBoard::from_square(dest), !self.side_to_move);
                 result.checkers ^= get_pawn_attacks(ksq, !result.side_to_move, dest_bb);
             } else {
                 result.checkers ^= get_pawn_attacks(ksq, !result.side_to_move, dest_bb);
