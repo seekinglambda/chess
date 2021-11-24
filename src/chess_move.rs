@@ -361,7 +361,7 @@ impl ChessMove {
 
             if !ep && takes {
                 if board.piece_on(m.get_dest()).is_none() {
-                    continue;
+                    //  continue;
                 }
             }
 
