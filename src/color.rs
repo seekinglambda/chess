@@ -59,6 +59,16 @@ impl Color {
         }
     }
 
+    /// Convert a `Color` to my fourth rank, which represents the rank of my pawns when
+    /// moving two squares forward.
+    #[inline]
+    pub fn to_third_rank(&self) -> Rank {
+        match *self {
+            Color::White => Rank::Third,
+            Color::Black => Rank::Sixth,
+        }
+    }
+
     /// Convert a `Color` to my seventh rank, which represents the rank before pawn promotion.
     #[inline]
     pub fn to_seventh_rank(&self) -> Rank {

@@ -164,7 +164,7 @@ impl BoardBuilder {
     /// ```
     pub fn get_en_passant(&self) -> Option<Square> {
         self.en_passant
-            .map(|f| Square::make_square((!self.get_side_to_move()).to_fourth_rank(), f))
+            .map(|f| Square::make_square((!self.get_side_to_move()).to_third_rank(), f))
     }
 
     /// Set the side to move on the position
